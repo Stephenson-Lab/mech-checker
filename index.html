@@ -3,57 +3,156 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mechanism product checker</title>
+  <title>Mechanism Product Checker</title>
 
-  <!-- JSME (local files in your repo) -->
+  <!-- Define JSME callback FIRST -->
+  <script>
+    function jsmeOnLoad() {
+      window.jsmeApplet = new JSApplet.JSME("jsme_container", "520px", "380px");
+      if (typeof initializePage === "function") {
+        initializePage();
+      }
+    }
+  </script>
+
+  <!-- JSME hosted version -->
   <script src="https://jsme-editor.github.io/dist/jsme/jsme.nocache.js"></script>
 
-  <!-- OpenChemLib JS (browser bundle via CDN) -->
+  <!-- OpenChemLib -->
   <script src="https://unpkg.com/openchemlib@8.3.0/dist/openchemlib-full.js"></script>
-  <!-- (If you prefer a different version, you can change it; this is just a pinned example.) :contentReference[oaicite:3]{index=3} -->
+
+  <!-- Your task data -->
+  <script src="./tasks.js"></script>
 
   <style>
-    body { font-family: system-ui, Arial, sans-serif; margin: 16px; }
-    .wrap { max-width: 980px; margin: 0 auto; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 14px; }
-    .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
-    .col { flex: 1 1 360px; }
-    button { padding: 10px 14px; border-radius: 10px; border: 1px solid #bbb; background: #fff; cursor: pointer; }
-    button:hover { background: #f6f6f6; }
-    .msg { margin-top: 12px; padding: 10px 12px; border-radius: 10px; border: 1px solid #ddd; white-space: pre-wrap; }
+    body { font-family: system-ui, Arial, sans-serif; margin: 20px; }
+    .wrap { max-width: 1000px; margin: auto; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 20px; }
+    .row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .col { flex: 1 1 400px; }
+    button { padding: 10px 16px; border-radius: 8px; border: 1px solid #bbb; background: #fff; cursor: pointer; }
+    button:hover { background: #f2f2f2; }
+    .msg { margin-top: 12px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; white-space: pre-wrap; }
     .muted { opacity: 0.8; }
-    .pill { display:inline-block; padding:2px 8px; border:1px solid #ddd; border-radius:999px; font-size:0.9em; }
-    a { color: inherit; }
   </style>
 
-  <script src="./tasks.js"></script>
-  <script src="./app.js"></script>
+  <script>
+    let currentTask = null;
+
+    function getTaskId() {
+      const params = new URLSearchParams(location.search);
+      const n = parseInt(params.get("task") || "1", 10);
+      return (Number.isFinite(n) && window.TASKS[n]) ? n : 1;
+    }
+
+    function initializePage() {
+      const taskId = getTaskId();
+      currentTask = window.TASKS[taskId];
+
+      document.getElementById("title").textContent = currentTask.title;
+      document.getElementById("formula").textContent = currentTask.formula;
+      document.getElementById("prompt").textContent = currentTask.prompt || "";
+      document.getElementById("stereoReq").textContent =
+        currentTask.requireStereo ? "Required" : "Ignored";
+    }
+
+    function clearDrawing() {
+      window.jsmeApplet.readMolFile("");
+      document.getElementById("msg").style.display = "none";
+    }
+
+    function showMsg(text) {
+      const el = document.getElementById("msg");
+      el.style.display = "block";
+      el.textContent = text;
+    }
+
+    function checkAnswer() {
+      if (!currentTask) return;
+
+      const smiles = window.jsmeApplet.smiles().trim();
+      if (!smiles) {
+        showMsg("Draw a structure first.");
+        return;
+      }
+
+      let studentMol;
+      try {
+        studentMol = OCL.Molecule.fromSmiles(smiles);
+      } catch (e) {
+        showMsg("Could not read that structure. Try again.");
+        return;
+      }
+
+      const studentFormula = studentMol.getMolecularFormula().formula;
+      if (studentFormula !== currentTask.formula) {
+        showMsg(
+          "Formula mismatch.\nYou drew: " +
+          studentFormula +
+          "\nExpected: " +
+          currentTask.formula
+        );
+        return;
+      }
+
+      const studentID_stereo =
+        OCL.CanonizerUtil.getIDCode(studentMol, OCL.CanonizerUtil.NORMAL);
+      const studentID_noStereo =
+        OCL.CanonizerUtil.getIDCode(studentMol, OCL.CanonizerUtil.NOSTEREO);
+
+      const acceptableStereo = new Set(
+        currentTask.answersSmiles.map(s =>
+          OCL.CanonizerUtil.getIDCode(
+            OCL.Molecule.fromSmiles(s),
+            OCL.CanonizerUtil.NORMAL
+          )
+        )
+      );
+
+      const acceptableNoStereo = new Set(
+        currentTask.answersSmiles.map(s =>
+          OCL.CanonizerUtil.getIDCode(
+            OCL.Molecule.fromSmiles(s),
+            OCL.CanonizerUtil.NOSTEREO
+          )
+        )
+      );
+
+      if (currentTask.requireStereo) {
+        if (acceptableStereo.has(studentID_stereo)) {
+          showMsg("✅ Correct!");
+        } else if (acceptableNoStereo.has(studentID_noStereo)) {
+          showMsg("❌ Right connectivity, but stereochemistry is wrong or missing.");
+        } else {
+          showMsg("❌ Incorrect. Check connectivity / regiochemistry / stereochemistry.");
+        }
+      } else {
+        if (acceptableNoStereo.has(studentID_noStereo)) {
+          showMsg("✅ Correct! (Stereochemistry ignored for this task.)");
+        } else {
+          showMsg("❌ Incorrect. Check connectivity / regiochemistry.");
+        }
+      }
+    }
+  </script>
 </head>
 
 <body>
   <div class="wrap">
-    <h2 id="title">Mechanism product checker</h2>
+    <h2 id="title">Mechanism Product Checker</h2>
 
     <div class="card">
       <div class="row">
         <div class="col">
-          <div class="muted">
-            Task: <span id="taskNo" class="pill"></span>
-          </div>
           <p><b>Formula:</b> <span id="formula"></span></p>
           <p><b>Stereochemistry:</b> <span id="stereoReq"></span></p>
           <p id="prompt" class="muted"></p>
-
-          <p class="muted">
-            Tip: open task links like
-            <a href="?task=1">?task=1</a>, <a href="?task=2">?task=2</a>, … <a href="?task=10">?task=10</a>
-          </p>
         </div>
 
         <div class="col">
           <div id="jsme_container"></div>
 
-          <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <div style="margin-top:12px; display:flex; gap:10px;">
             <button onclick="checkAnswer()">Check</button>
             <button onclick="clearDrawing()">Clear</button>
           </div>
