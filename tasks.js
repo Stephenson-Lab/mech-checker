@@ -1,7 +1,7 @@
 // Edit these 10 entries.
 // answersSmiles can contain multiple acceptable products.
 window.TASKS = {
-  1: { title: "CHE-5101A - Stephenson - Problem #1 ", formula: "C10H12O2", requireStereo: true,  prompt: "Draw the major product.", answersSmiles: ["C[C@H](O)CC(=O)OC"] },
+  1: { title: "CHE-5101A - Stephenson - Problem Q1 ", formula: "C10H12O2", requireStereo: true,  prompt: "Draw the major product.", answersSmiles: ["C[C@H](O)CC(=O)OC"] },
   2: { title: "Mechanism activity 2", formula: "C7H7BrO",  requireStereo: false, prompt: "", answersSmiles: ["O=Cc1cccc(Br)c1"] },
   3: { title: "Mechanism activity 3", formula: "C8H9Cl",   requireStereo: true,  prompt: "", answersSmiles: ["CC[C@H](Cl)c1ccccc1"] },
   4: { title: "Mechanism activity 4", formula: "C9H10O",   requireStereo: false, prompt: "", answersSmiles: ["CCc1cccc(O)c1"] },
