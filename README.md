@@ -49,14 +49,18 @@ The system is hosted using GitHub Pages and requires no server infrastructure.
 
 ---
 
-## Technical Architecture
+## Technical Architecture & Acknowledgements and Third-Party Software
 
 The application operates entirely in the browser.
 
 Components:
 
-- **JSME (JavaScript Molecular Editor)** — molecular drawing interface  
-- **OpenChemLib JS** — canonicalization and structural comparison  
+- **JSME (JavaScript Molecular Editor)** — molecular drawing interface
+ B. Bienfait and P. Ertl, JSME: a free molecule editor in JavaScript, J. Cheminformatics 5:24 (2013)
+
+- **OpenChemLib JS** — canonicalization and structural comparison
+Zasso, M., Patiny, L., Sander, T., & Rufener, C. (2026). openchemlib-js: library to manipulate chemical structures and reactions in JavaScript (v9.20.0). Zenodo. https://doi.org/10.5281/zenodo.18631872
+  
 - **GitHub Pages** — static web hosting  
 
 No backend services, databases, or authentication systems are used.
