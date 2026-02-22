@@ -17,6 +17,10 @@ Users who adopt or adapt this tool should review updates periodically and test c
 ### A Browser-Based Molecular Structure Input and Validation Tool  
 Designed for Blackboard Ultra and LMS Integration
 
+## Version Description
+
+This repository contains the simplest implementation of Mech-Checker. It is designed for embedding within a Blackboard Ultra Document via an iframe, with the question prompt provided separately in a preceding content block. The application validates the structure drawn by the student against the criteria defined in `tasks.js`, checking molecular formula, connectivity, and (where specified) stereochemistry. It is intended for straightforward formative structure verification rather than mechanism grading or advanced interaction.
+
 ---
 
 ## Purpose and Scope
@@ -49,7 +53,7 @@ The system is hosted using GitHub Pages and requires no server infrastructure.
 
 ---
 
-## Technical Architecture & Acknowledgements and Third-Party Software
+## Technical Architecture and Acknowledgements and Third-Party Software
 
 The application operates entirely in the browser.
 
@@ -60,7 +64,7 @@ Components:
 
 - **OpenChemLib JS** — canonicalization and structural comparison
 Zasso, M., Patiny, L., Sander, T., & Rufener, C. (2026). openchemlib-js: library to manipulate chemical structures and reactions in JavaScript (v9.20.0). Zenodo. https://doi.org/10.5281/zenodo.18631872
-  
+
 - **GitHub Pages** — static web hosting  
 
 No backend services, databases, or authentication systems are used.

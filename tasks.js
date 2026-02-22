@@ -1,7 +1,29 @@
 // Edit these 10 entries.
 // answersSmiles can contain multiple acceptable products.
 window.TASKS = {
-  1: { title: "CHE-5101A - Stephenson - Problem 1", formula: "C5H10O3", requireStereo: true,  prompt: "Draw the major product.", answersSmiles: ["C[C@H](O)CC(=O)OC"] },
+  1: {
+  title: "How to Use Mech-Checker - Practice: Draw benzene",
+  formula: "C6H6",
+  requireStereo: false,
+  prompt: `How to Use Mech-Checker
+
+Mech-Checker is a formative self-assessment tool designed to support practice questions in which the answer is a chemical structure.
+
+The tool was originally developed by Dr Stephenson to check students’ answers to mechanism questions, hence the name Mech-Checker. It may also be used for other structure-based questions (e.g. spectroscopy or reaction outcome problems).
+
+Read the question prompt carefully in the content block above. Based on the information provided, draw your proposed structure in the editor.
+
+When you are satisfied with your answer:
+
+Click “Check” to receive automated feedback.
+
+Click “Clear” to remove the feedback message (this does not delete your structure).
+
+The tool evaluates your response against the expected answer for the task, checking molecular formula, bonding connectivity, and stereochemistry (where required).
+
+You may attempt the activity multiple times. This tool is intended for formative practice only.`,
+  answersSmiles: ["c1ccccc1"]
+},
   2: { title: "Mechanism activity 2", formula: "C7H7BrO",  requireStereo: false, prompt: "", answersSmiles: ["O=Cc1cccc(Br)c1"] },
   3: { title: "Mechanism activity 3", formula: "C8H9Cl",   requireStereo: true,  prompt: "", answersSmiles: ["CC[C@H](Cl)c1ccccc1"] },
   4: { title: "Mechanism activity 4", formula: "C9H10O",   requireStereo: false, prompt: "", answersSmiles: ["CCc1cccc(O)c1"] },
