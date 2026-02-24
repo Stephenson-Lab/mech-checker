@@ -1,3 +1,8 @@
+## Version Description
+
+This version has be superseded by Mech-Checker-Light
+
+
 ## Disclaimer
 
 This tool was developed for use in the author's own teaching and has been tested only within that specific instructional context.
